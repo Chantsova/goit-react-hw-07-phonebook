@@ -1,23 +1,12 @@
 import './ContactList.css';
-import React, { useState, useEffect } from 'react';
 import { toast, Toaster } from 'react-hot-toast';
-// import * as contactsActions from '../redux/contacts/contacts-actions';
-// import { useSelector, useDispatch } from 'react-redux';
-// import { getVisibleContacts } from '../redux/contacts/contacts-selectors';
+import { useFetchContactsQuery, useDeleteContactMutation } from '../redux/contacts/contacts-slice';
 
-import { useFetchContactsQuery, useDeleteContactMutation } from 'components/redux/contacts/contacts-slice';
-
-export default function ContactList() {
+const ContactList = () => {
   const { data: contacts, isFetching } = useFetchContactsQuery();
-  const [deleteContact] = useDeleteContactMutation();
-  // const [contactsList, setContactsList] = useState([]);
 
-  // useEffect(() => {
-  //   setContactsList(contacts)
-  // }, [contacts])
-  
-  //const contacts = useSelector(getVisibleContacts);
-  //const dispatch = useDispatch();
+  const [deleteContact] = useDeleteContactMutation();
+
   const onDeleteContact = async (contactId) => {
     await deleteContact(contactId).unwrap();
      toast.success("Contact deleted")
@@ -44,3 +33,5 @@ export default function ContactList() {
     </div>
   );
 }
+
+export default ContactList;
