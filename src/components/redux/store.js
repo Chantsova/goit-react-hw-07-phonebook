@@ -1,56 +1,16 @@
 import { configureStore } from '@reduxjs/toolkit';
+import { setupListeners } from '@reduxjs/toolkit/dist/query';
 import contactsReducer from './contacts/contacts-reducer';
-// import {
-//   persistStore,
-//   persistReducer,
-//   FLUSH,
-//   REHYDRATE,
-//   PAUSE,
-//   PERSIST,
-//   PURGE,
-//   REGISTER,
-// } from 'redux-persist';
-// import logger from 'redux-logger';
-// import storage from 'redux-persist/lib/storage';
-
-// const contactsPersistConfig = {
-//   key: 'contacts',
-//   storage,
-//   blacklist: ['filter'],
-// };
-
-// const middleware = getDefaultMiddleware => [
-//   ...getDefaultMiddleware({
-//     serializableCheck: {
-//       ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
-//     },
-//   }),
-//   logger,
-// ];
+import { phonebookApi } from './contacts/contacts-slice';
 
 export const store = configureStore({
   reducer: {
     contacts: contactsReducer,
+    [phonebookApi.reducerPath]: phonebookApi.reducer
+    
   },
-  // middleware,
-  // devTools: process.env.NODE_ENV === 'development',
+  middleware: getDefaultMiddleware => [...getDefaultMiddleware(), phonebookApi.middleware],
+  devTools: process.env.NODE_ENV === 'development',
 });
 
-// const persistor = persistStore(store);
-
-// export { store, persistor };
-
-// const addContact = data => {
-//   return {
-//     type: 'addContact',
-//     payload: data
-//   }
-// };
-
-// const addContactsOperation = () => {
-//   const contact = fetch('/contacts')
-//   return (dispatch) => {
-//     dispatch(addContact(contact))
-//   }
-// };
-
+setupListeners(store.dispatch);

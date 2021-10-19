@@ -1,6 +1,5 @@
 // import { combineReducers } from 'redux';
-import { createReducer, combineReducers, createSlice } from '@reduxjs/toolkit';
-import { fetchContacts } from './contacts-operations';
+// import { createReducer } from '@reduxjs/toolkit';
 // import * as contactsActions from '../contacts/contacts-actions';
 
 // const items = createReducer(
@@ -25,40 +24,3 @@ import { fetchContacts } from './contacts-operations';
 //   items,
 //   filter,
 // });
-
-const items = createReducer([], {
-  [fetchContacts.fulfilled]: (_, { payload }) => payload
-});
-
-const isLoading = createReducer(false, {
-  [fetchContacts.pending]: () => true,
-  [fetchContacts.fulfilled]: () => false,
-  [fetchContacts.rejected]: () => false,
-});
-
-const error = createReducer(null, {
-  [fetchContacts.rejected]: (_, { payload }) => payload,
-  [fetchContacts.pending]: () => null
-});
-
-export default combineReducers({
-  items,
-  isLoading,
-  error
-});
-
-//Immer for copy state mutation
-// const contactsSlice = createSlice({
-//   name: 'contacts',
-//   initialState: { items: [], isLoading: false, error: null },
-//   extraReducers: {
-//     [fetchContacts.fulfilled]: (state, {payload}) => {
-//       state.items = payload;
-//     },
-//     [fetchContacts.pending]: (state) => {
-//       state.isLoading = true;
-//     },
-//     [fetchContacts.rejected]: (_, { payload }) => payload,
-//   }
-// });
-// export default contactsSlice.reducer;

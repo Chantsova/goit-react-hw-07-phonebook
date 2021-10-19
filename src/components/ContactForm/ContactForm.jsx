@@ -1,19 +1,23 @@
 import './ContactForm.css';
 import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { contactsOperations, contactsSelectors, contactsActions} from "../redux/contacts";
-
+import { connect } from "react-redux";
+import {toast, Toaster} from 'react-hot-toast';
+import { useSelector } from 'react-redux';
+// import * as contactsActions from '../redux/contacts/contacts-actions';
 import { v4 as uuidv4 } from 'uuid';
+import { getContacts } from '../redux/contacts/contacts-selectors';
 
-export default function ContactForm() {
+import { useAddContactMutation } from 'components/redux/contacts/contacts-slice';
+
+export default function ContactForm({contacts}) {
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
-  const contacts = useSelector(contactsSelectors.getContacts);
-
-  const dispatch = useDispatch();
+//  const contacts = useSelector(getContacts);
 
   const nameInputId = uuidv4();
   const numberInputId = uuidv4();
+
+  const [addContact, {isLoading}] = useAddContactMutation();
 
   const handleChange = e => {
     const { name, value } = e.target;
@@ -32,28 +36,37 @@ export default function ContactForm() {
     }
   };
 
-  // const handleSubmit = e => {
-  //   e.preventDefault();
-  //   const found = contacts.find(
-  //     contact => contact.name.toLowerCase() === name.toLowerCase(),
-  //   );
+  const handleSubmit = e => {
+    e.preventDefault();
 
-  //   if (found === undefined) {
-  //     dispatch(contactsActions.addContact({ name, number }));
-  //     reset();
-  //   } else {
-  //     alert(`${name} is already in the Contact List`);
-  //   }
-  // };
+    // const found = contacts.find(
+    //   contact => contact.name.toLowerCase() === name.toLowerCase(),
+    // );
 
-  // const reset = () => {
-  //   setName('');
-  //   setNumber('');
-  // };
+    // if (found === undefined) {
+    addContact({ name, number });
+    toast.success('Contact added');
+    reset();
+    
+    //   } else {
+    //     alert(`${name} is already in the Contact List`);
+    //  }
+
+    
+  };
+
+
+
+  // const dispatch = useDispatch();
+
+  const reset = () => {
+    setName('');
+    setNumber('');
+  };
 
   return (
-    <form className="submit__form" onSubmit={"aaa"}>
-      {/* //{handleSubmit}> */}
+    <>
+    <form className="submit__form" onSubmit={handleSubmit}>
       <label htmlFor={nameInputId}>
         <h2>Name</h2>
         <input
@@ -79,9 +92,11 @@ export default function ContactForm() {
         />
       </label>
 
-      <button className="submit__btn" type="submit">
+      <button className="submit__btn" type="submit" disabled={isLoading}>
         Add contact
       </button>
     </form>
+    <div><Toaster/></div>
+    </>
   );
 }
