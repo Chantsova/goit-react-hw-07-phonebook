@@ -1,20 +1,20 @@
 import './Filter.css';
-import { useFilterContactMutation } from '../redux/contacts/contacts-slice';
+import { useSelector, useDispatch } from 'react-redux';
+import { changeFilter } from '../redux/contacts/contacts-actions';
+import { getFilter } from '../redux/contacts/contacts-selectors';
 
 export default function Filter() {
-  const [filterContact] = useFilterContactMutation();
+  const value = useSelector(getFilter);
   
-  const onFilter = async (e) => {
-    await filterContact(e.target.value).unwrap();
-  };
+  const dispatch = useDispatch();
 
   return (
     <label className="filter">
       <h3>Find contacts by name</h3>
       <input
         type="text"
-       // value={value}
-        onChange={e => onFilter(e)}
+        value={value}
+        onChange={e => dispatch(changeFilter(e.target.value))}
       ></input>
     </label>
   );

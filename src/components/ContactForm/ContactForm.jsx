@@ -1,8 +1,10 @@
 import './ContactForm.css';
 import React, { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import {toast, Toaster} from 'react-hot-toast';
 import { v4 as uuidv4 } from 'uuid';
 import { useAddContactMutation } from '../redux/contacts/contacts-slice';
+import { getVisibleContacts, getContacts } from '../redux/contacts/contacts-selectors';
 
 export default function ContactForm() {
   const [name, setName] = useState('');
@@ -12,7 +14,8 @@ export default function ContactForm() {
   const numberInputId = uuidv4();
 
   const [addContact, {isLoading}] = useAddContactMutation();
-
+  const contacts = useSelector(getContacts);
+  
   const handleChange = e => {
     const { name, value } = e.target;
 
@@ -32,19 +35,19 @@ export default function ContactForm() {
 
   const handleSubmit = e => {
     e.preventDefault();
+    
+    const found = contacts.find(
+      contact => contact.name.toLowerCase() === name.toLowerCase(),
+    );
 
-    // const found = contacts.find(
-    //   contact => contact.name.toLowerCase() === name.toLowerCase(),
-    // );
-
-    // if (found === undefined) {
+    if (found === undefined) {
     addContact({ name, number });
     toast.success('Contact added');
     reset();
     
-    //   } else {
-    //     alert(`${name} is already in the Contact List`);
-    //  }    
+      } else {
+        alert(`${name} is already in the Contact List`);
+     }    
   };
 
   const reset = () => {
