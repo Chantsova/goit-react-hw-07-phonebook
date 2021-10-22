@@ -1,10 +1,8 @@
 import './ContactForm.css';
 import React, { useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
 import {toast, Toaster} from 'react-hot-toast';
 import { v4 as uuidv4 } from 'uuid';
-import { useAddContactMutation } from '../redux/contacts/contacts-slice';
-import { getVisibleContacts, getContacts } from '../redux/contacts/contacts-selectors';
+import { useAddContactMutation, useFetchContactsQuery } from '../redux/contacts/contacts-slice';
 
 export default function ContactForm() {
   const [name, setName] = useState('');
@@ -14,7 +12,7 @@ export default function ContactForm() {
   const numberInputId = uuidv4();
 
   const [addContact, {isLoading}] = useAddContactMutation();
-  const contacts = useSelector(getContacts);
+  const {data: contacts} = useFetchContactsQuery();
   
   const handleChange = e => {
     const { name, value } = e.target;
@@ -46,7 +44,7 @@ export default function ContactForm() {
     reset();
     
       } else {
-        alert(`${name} is already in the Contact List`);
+      alert(`${name} is already in the Contact List`);
      }    
   };
 

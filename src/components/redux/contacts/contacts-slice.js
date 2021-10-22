@@ -24,14 +24,7 @@ export const phonebookApi = createApi({
             }),
               invalidatesTags: ['Contact']
         }),
-        filterContact: builder.mutation({
-            query: filterQuery => ({
-                url: `/contacts?filter=${filterQuery}`,
-                method: 'GET',
-            }),
-            invalidatesTags: ['Contact']
-        })
     }),
 });
 
-export const { useFetchContactsQuery, useAddContactMutation, useDeleteContactMutation, useFilterContactMutation } = phonebookApi;
+export const { useFetchContactsQuery, useAddContactMutation, useDeleteContactMutation } = phonebookApi;
